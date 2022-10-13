@@ -500,7 +500,7 @@ HAVING COUNT(id) = 1;
 													 
 CREATE DATABASE alura;
 
-CREATE TABLE aluno (
+ CREATE TABLE aluno (
     id SERIAL PRIMARY KEY,
 	primeiro_nome VARCHAR(255) NOT NULL,
 	ultimo_nome VARCHAR(255) NOT NULL,
@@ -524,13 +524,13 @@ CREATE TABLE curso (
 		PRIMARY KEY (aluno_id, curso_id)
 	);
 
-INSERT INTO aluno (primeiro_nome, ultimo_nome, data_nascimento) 
+INSERT INTO academico.aluno (primeiro_nome, ultimo_nome, data_nascimento) 
 			 VALUES ('Vinícius', 'Dias', '1997-10-15' ), 
 				 ('Patrícia', 'Freitas', '1986-10-25'), 
 				 ('Diogo', 'Oliveira', '1984-08-27'), 
 				 ('Maria', 'Rosa', '1985-01-01');
 
-INSERT INTO categoria(nome) VALUES ('Front-end'), ('Programação'),('Banco de dados'),('Data Science');															 
+INSERT INTO academico.categoria(nome) VALUES ('Front-end'), ('Programação'),('Banco de dados'),('Data Science');															 
 
 INSERT INTO curso (nome, categoria_id) VALUES
  	('HTML',1),
@@ -548,7 +548,7 @@ INSERT INTO curso (nome, categoria_id) VALUES
 	('Machine Learning', 4),
 	('Power BI', 4);
 
-INSERT INTO aluno_curso VALUES (1,4), (1,11),(2,1),(2,2),(3,4),(3,3),(4,4),(4,6),(4,5);
+INSERT INTO academico.aluno_curso VALUES (1,4), (1,11),(2,1),(2,2),(3,4),(3,3),(4,4),(4,6),(4,5);
 													 
 													 
 													 SELECT * FROM aluno;
@@ -646,5 +646,7 @@ SELECT * FROM vw_cursos_por_categoria;
 
 CREATE VIEW vw_cursos_programacao AS SELECT nome FROM curso WHERE categoria_id = 2;
 SELECT * FROM vw_cursos_programacao;	 
+
+
 													
 													 

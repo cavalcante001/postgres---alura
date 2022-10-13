@@ -40,3 +40,138 @@ CREATE TABLE academico.curso (
            [ CONNECTION LIMIT [=] connlimit ]
            [ IS_TEMPLATE [=] istemplate ] ]
   */
+  
+  
+  
+  
+  
+  
+  /* CREATE TABLE IF NOT EXISTS, CONSTRAINT, CHECK, UNIQUE EM VÁRIAS COLUNAS */
+  
+   CREATE TABLE IF NOT EXISTS academico.aluno (
+    id SERIAL PRIMARY KEY,
+	primeiro_nome VARCHAR(255) NOT NULL CHECK (primeiro_nome <> '' ), 
+	ultimo_nome VARCHAR(255) NOT NULL,
+	data_nascimento DATE NOT NULL DEFAULT NOW()::DATE
+);
+
+DROP TABLE IF EXISTS a;
+
+CREATE TEMPORARY TABLE a (
+	coluna1 VARCHAR(255) NOT NULL CHECK(a.coluna1 <> ''),
+	coluna2 VARCHAR(255) NOT NULL,
+	UNIQUE (coluna1, coluna2)
+);
+
+INSERT INTO a VALUES ('a', 'b'); 
+
+
+-- RENAME
+
+DROP TABLE IF EXISTS a;
+
+CREATE TEMPORARY TABLE a (
+	coluna1 VARCHAR(255) NOT NULL CHECK(a.coluna1 <> ''),
+	coluna2 VARCHAR(255) NOT NULL,
+	UNIQUE (coluna1, coluna2)
+);
+
+ALTER TABLE a RENAME TO teste;
+SELECT * FROM teste;
+
+ALTER TABLE teste
+RENAME coluna2 TO segunda_coluna;
+
+-- DDL - DATA DEFINITION LANGUAGE (CREATE, ALTER, DROP INSERT)
+-- DML - DATA MANIPULATION LANGUAGE (INSERT, UPDATE, DELETE, SELECT)
+
+
+
+/*
+	ASPAS SIMPLES DELIMITAM STRING ''
+	ASPAS DUPLAS DELIMITAM CAMPO(NOME DE COLUNAS) ""
+*/
+
+SELECT primeira_coluna as "Primeira Coluna" FROM teste;
+
+SELECT * 
+FROM academico.curso
+JOIN academico.categoria ON academico.categoria.id = academico.curso.categoria_id
+WHERE categoria_id = 2;
+
+/* INSERT A PARTIR DE UM SELECT */
+
+CREATE TEMPORARY TABLE cursos_programacao (
+	id_curso INTEGER PRIMARY KEY,
+	nome_curso VARCHAR(255) NOT NULL
+);
+
+SELECT * FROM cursos_programacao;
+
+DELETE FROM cursos_programacao;
+
+INSERT INTO cursos_programacao VALUES (4, 'PHP'), (5, 'JAVA'), (6, 'C++');
+
+INSERT INTO cursos_programacao
+SELECT academico.curso.id,
+		academico.curso.nome
+FROM academico.curso
+JOIN academico.categoria ON academico.categoria.id = academico.curso.categoria_id
+WHERE categoria_id = 2;
+
+/* IMPORTAR/EXPORTAR */
+
+/* UPDATE EM UMA TABELA BASEADO EM DADOS DE OUTRA TABELA, UTILIZANDO O UPDATE FROM*/
+
+SELECT * FROM academico.curso ORDER BY 1;
+SELECT * FROM teste.cursos_programacao ORDER BY 1;
+
+UPDATE academico.curso
+SET nome = 'PHP Básico'
+WHERE id = 4;
+
+UPDATE academico.curso
+SET nome = 'Java Básico'
+WHERE id = 5;
+
+UPDATE academico.curso
+SET nome = 'C++ Básico'
+WHERE id = 6;
+
+UPDATE teste.cursos_programacao 
+SET nome_curso = nome
+FROM academico.curso WHERE teste.cursos_programacao.id_curso = academico.curso.id 
+
+/* ATOMICIDADE */
+/* TRANSAÇÕES */
+
+START TRANSACTION;
+BEGIN;
+
+SELECT * FROM teste.cursos_programacao
+
+DELETE FROM teste.cursos_programacao;
+
+/* ROLLBACK */
+
+START TRANSACTION;
+BEGIN;
+
+SELECT * FROM teste.cursos_programacao
+
+DELETE FROM teste.cursos_programacao;
+
+ROLLBACK;
+
+
+BEGIN;
+DELETE FROM teste.cursos_programacao WHERE id_curso = 50;
+COMMIT;
+
+
+
+
+
+
+
+
